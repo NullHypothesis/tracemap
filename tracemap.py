@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import argparse
 
 import netaddr
@@ -15,8 +16,10 @@ def parse_cmd_args():
     parser = argparse.ArgumentParser(description = "Run and visualise "
                                                    "traceroutes.")
 
-    parser.add_argument("destinations",
+    parser.add_argument("-d",
+                        "--destinations",
                         type = str,
+                        default = None,
                         nargs = "+",
                         help = "Traceroute destinations.  Can be single "
                                "addresses or netblocks, e.g., 1.2.3.4/24.")
@@ -75,7 +78,10 @@ def main():
 
     args = parse_cmd_args()
 
-    destinations = map(str, generate_destinations(args.destinations,
+    destinations = args.destinations if args.destinations \
+                                     else [line.strip() for line in sys.stdin]
+
+    destinations = map(str, generate_destinations(destinations,
                                                   args.sampling_rate))
 
     if (not args.reckless) and (len(destinations) > MAX_TRACEROUTES):
