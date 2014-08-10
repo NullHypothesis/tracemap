@@ -45,6 +45,14 @@ def parse_cmd_args():
                                "number n means that one out of n IP addresses "
                                "is sampled (default: no sampling).")
 
+    parser.add_argument("-p",
+                        "--port",
+                        type = int,
+                        default = 80,
+                        help = "TCP port, the traceroutes are targeting.  "
+                               "Note that this port is the same for all "
+                               "destinations.")
+
     parser.add_argument("-r",
                         "--reckless",
                         action = "store_true",
@@ -91,7 +99,9 @@ def main():
                  (MAX_TRACEROUTES, len(destinations))
         return 1
 
-    res, unans = traceroute(destinations, maxttl = args.maxttl)
+    res, unans = traceroute(destinations,
+                            dport = args.port,
+                            maxttl = args.maxttl)
 
     res.graph(type = "pdf", target = "> %s" % args.output)
 
