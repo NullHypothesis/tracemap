@@ -104,6 +104,7 @@ def main():
                             maxttl = args.maxttl)
 
     res.graph(type = "pdf", target = "> %s" % args.output)
+    print "Wrote output to: %s" % args.output
 
 if __name__ == "__main__":
     exit(main())
